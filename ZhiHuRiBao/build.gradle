@@ -30,7 +30,6 @@ dependencies {
     compile files('libs/classes.jar')
     compile 'com.android.support:recyclerview-v7:23.2.1'
     compile 'com.android.support:cardview-v7:23.2.1'
-    compile project(path: ':xUtilsLibrary')
     compile files('libs/gson-2.4.jar')
     compile 'com.android.support:support-v4:23.3.0'
 }
