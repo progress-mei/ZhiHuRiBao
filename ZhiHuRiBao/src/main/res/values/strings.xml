@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">知乎日报·</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="not_coming"><![CDATA[这一天还没有来临呢！>_<]]></string>
+    <string name="not_born"><![CDATA[这一天知乎日报还没有诞生呢！>_<]]></string>
+
+
+</resources>
