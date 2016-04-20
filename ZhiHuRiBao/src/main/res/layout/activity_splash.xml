@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="日·报"
+        android:text="看日报·"
         android:textColor="@android:color/white"
         android:textSize="40sp" />
 

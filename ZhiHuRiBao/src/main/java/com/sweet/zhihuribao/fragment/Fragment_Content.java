@@ -52,7 +52,7 @@ public class Fragment_Content extends BaseFragment implements NavigationView.OnN
 
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setTitle("知乎日报·");
+        toolbar.setTitle("看日报·");
         toolbar.setTitleTextColor(Color.WHITE);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -61,7 +61,7 @@ public class Fragment_Content extends BaseFragment implements NavigationView.OnN
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ChooseDateActivity.class);
                 startActivity(intent);
-;
+                ;
             }
         });
 
@@ -146,19 +146,20 @@ public class Fragment_Content extends BaseFragment implements NavigationView.OnN
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+//        if (id == R.id.nav_camera) {
+//            // Handle the camera action
+//        }// else if (id == R.id.nav_gallery) {
+////
+////        } else if (id == R.id.nav_slideshow) {
+//
+////        }
+//        else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

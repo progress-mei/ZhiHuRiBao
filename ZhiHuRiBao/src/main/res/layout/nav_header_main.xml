@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="知乎日报"
+        android:text="看日报·"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView

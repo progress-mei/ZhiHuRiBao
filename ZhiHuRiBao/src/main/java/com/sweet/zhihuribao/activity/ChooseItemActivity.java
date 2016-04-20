@@ -1,5 +1,6 @@
 package com.sweet.zhihuribao.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -150,6 +151,7 @@ public class ChooseItemActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
 
+
                 String ids = PrefUtils.getString(ChooseItemActivity.this, "read_ids", "");
 
                 if (!ids.contains(zhData.stories.get(position).id)) {
@@ -157,6 +159,10 @@ public class ChooseItemActivity extends BaseActivity {
                     PrefUtils.setString(ChooseItemActivity.this, "read_ids", read_ids);
                 }
                 setReadItemColor(view);
+                //跳转内容详情页
+                Intent intent = new Intent(getApplicationContext(), ContentActivity.class);
+                intent.putExtra("id", zhData.stories.get(position).id + "");
+                startActivity(intent);
             }
 
             @Override
