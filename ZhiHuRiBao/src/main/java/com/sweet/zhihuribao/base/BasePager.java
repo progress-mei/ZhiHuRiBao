@@ -3,15 +3,14 @@ package com.sweet.zhihuribao.base;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lidroid.xutils.HttpUtils;
@@ -21,12 +20,10 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.sweet.zhihuribao.R;
 import com.sweet.zhihuribao.activity.ContentActivity;
-import com.sweet.zhihuribao.activity.MainActivity;
 import com.sweet.zhihuribao.adapter.MyAdapter;
 import com.sweet.zhihuribao.bean.ZhiM;
 import com.sweet.zhihuribao.utils.Image_sp;
 import com.sweet.zhihuribao.utils.PrefUtils;
-import com.sweet.zhihuribao.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +45,7 @@ public abstract class BasePager {
     public MyAdapter mAdapter;
     public SwipeRefreshLayout swipeLayout;
     public boolean isRefrush = false;
+    private ViewPager viewById;
 
     public BasePager(Context context) {
         mContent = context;
@@ -73,10 +71,12 @@ public abstract class BasePager {
     public void initViews() {
         mRootView = View.inflate(mContent, R.layout.list_item, null);
         mList = (RecyclerView) mRootView.findViewById(R.id.rv_list);
+
         layoutManager = new LinearLayoutManager(mContent);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
-
         mList.setLayoutManager(layoutManager);
+
+
 
         swipeLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.sr_refresh);
         swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,

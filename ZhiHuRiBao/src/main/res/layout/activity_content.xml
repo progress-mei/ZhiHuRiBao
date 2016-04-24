@@ -25,8 +25,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="200dp"
                     android:contentDescription="@string/app_name"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/splash" />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:id="@+id/tv_Title"
@@ -34,10 +33,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:maxLines="2"
+                    android:background="#a000"
+                    android:paddingTop="8dp"
                     android:paddingBottom="30dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="2015 ACG 大事件：不管你宅不宅，所有人都被 duang 字洗脑了"
                     android:textColor="#fff"
                     android:textSize="16sp" />
 
@@ -50,7 +50,6 @@
                     android:maxLines="2"
                     android:paddingBottom="10dp"
                     android:paddingRight="10dp"
-                    android:text="所有人都被 duang 字洗脑了"
                     android:textColor="#fff"
                     android:textSize="13sp" />
             </RelativeLayout>

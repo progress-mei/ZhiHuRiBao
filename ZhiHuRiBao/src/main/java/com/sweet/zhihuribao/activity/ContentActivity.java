@@ -3,7 +3,6 @@ package com.sweet.zhihuribao.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -21,9 +20,6 @@ import com.sweet.zhihuribao.R;
 import com.sweet.zhihuribao.base.BaseActivity;
 import com.sweet.zhihuribao.bean.ItemContent;
 import com.sweet.zhihuribao.utils.Image_sp;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by Sweet on 2016/4/15/0015.
@@ -98,17 +94,20 @@ public class ContentActivity extends BaseActivity {
     }
 
     private void initWeb() {
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
+
         //启用支持javascript
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDefaultTextEncodingName("utf-8");
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); //图片自适应
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);//根据传入的参数再去加载网页
+                return true;//表示当前webview可以处理打开新网页的请求，不用借助系统浏览器
+            }
+        });
         webView.loadDataWithBaseURL(null, body, "text/html", "utf8", null);
     }
 }
