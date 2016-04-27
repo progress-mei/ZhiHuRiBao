@@ -22,6 +22,7 @@ public class Pager4 extends BasePager {
     @Override
     public void initData() {
         initDate(-2);
+        getCache(titleTiem);
         getDataFromSever(titleTiem);
     }
 

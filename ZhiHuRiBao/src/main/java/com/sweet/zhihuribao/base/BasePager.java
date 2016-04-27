@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import com.sweet.zhihuribao.R;
 import com.sweet.zhihuribao.activity.ContentActivity;
 import com.sweet.zhihuribao.adapter.MyAdapter;
 import com.sweet.zhihuribao.bean.ZhiM;
+import com.sweet.zhihuribao.utils.CacheUtils;
 import com.sweet.zhihuribao.utils.Image_sp;
 import com.sweet.zhihuribao.utils.PrefUtils;
 
@@ -32,7 +34,7 @@ import java.util.Calendar;
 /**
  * Created by Sweet on 2016/4/6/0006.
  */
-public abstract class BasePager {
+public class BasePager {
 
     public String titleTiem;
     public String titleDate;
@@ -77,7 +79,6 @@ public abstract class BasePager {
         mList.setLayoutManager(layoutManager);
 
 
-
         swipeLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.sr_refresh);
         swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -99,8 +100,17 @@ public abstract class BasePager {
     /**
      * 初始化数据
      */
-    public abstract void initData();
+    public void initData() {
 
+    }
+
+    public void getCache(String date) {
+        String cache = CacheUtils.getCache(Image_sp.oldUrl + date, mContent);
+        if (!TextUtils.isEmpty(cache)) {
+            praseData(cache);
+        }
+        getDataFromSever(date);
+    }
 
     /**
      * 初始化事件
@@ -126,13 +136,14 @@ public abstract class BasePager {
     /**
      * 从网络获取数据
      */
-    public void getDataFromSever(String date) {
+    public void getDataFromSever(final String date) {
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.GET, Image_sp.oldUrl + date, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 String result = responseInfo.result;
                 praseData(result);
+                CacheUtils.setCache(Image_sp.oldUrl + date, result, mContent);
                 if (isRefrush) {
                     showSnackbar("刷新成功啦...");
                     swipeLayout.setRefreshing(false);
@@ -164,6 +175,7 @@ public abstract class BasePager {
         mAdapter = new MyAdapter(mContent, stories);
         mList.setAdapter(mAdapter);
 
+
         mAdapter.setmOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -171,7 +183,7 @@ public abstract class BasePager {
                 Intent intent = new Intent(mContent, ContentActivity.class);
                 intent.putExtra("id", zhData.stories.get(position).id + "");
                 mContent.startActivity(intent);
-
+                System.out.println(position + "+++");
                 String ids = PrefUtils.getString(mContent, "read_ids", "");
                 if (!ids.contains(zhData.stories.get(position).id)) {
                     String read_ids = ids + zhData.stories.get(position).id + ",";

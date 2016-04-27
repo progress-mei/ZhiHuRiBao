@@ -107,13 +107,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     //真实的position数据
     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
-        return mHeaderView == null ? position : position - 1;
+        return mHeaderView == null ? position : position ;
     }
 
 
     @Override
     public int getItemCount() {
-        return stories.size() + 1;
+        return stories.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

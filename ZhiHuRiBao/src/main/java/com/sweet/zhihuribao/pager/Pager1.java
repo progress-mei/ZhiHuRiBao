@@ -2,9 +2,12 @@ package com.sweet.zhihuribao.pager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,6 +26,7 @@ import com.sweet.zhihuribao.adapter.HeadTopViewPager;
 import com.sweet.zhihuribao.adapter.MyAdapter;
 import com.sweet.zhihuribao.base.BasePager;
 import com.sweet.zhihuribao.bean.ZhiM;
+import com.sweet.zhihuribao.utils.CacheUtils;
 import com.sweet.zhihuribao.utils.Image_sp;
 import com.sweet.zhihuribao.utils.PrefUtils;
 
@@ -36,6 +40,7 @@ public class Pager1 extends BasePager {
     private TextView viewById;
     private LinearLayout dot_layout;
     private ViewPager mHeadViewPager;
+    private Handler handler;
 
     public Pager1(Context context) {
         super(context);
@@ -96,6 +101,10 @@ public class Pager1 extends BasePager {
 
     @Override
     public void initData() {
+        String cache = CacheUtils.getCache(Image_sp.zhihuItem, mContent);
+        if (!TextUtils.isEmpty(cache)) {
+            praseData(cache);
+        }
         getDataFromSever();
     }
 
@@ -114,13 +123,14 @@ public class Pager1 extends BasePager {
             dot_layout.addView(view);
         }
     }
+
     /**
      * 更新选择器
      */
-    private void updateIntroAndDot(){
-        int currentPage = mHeadViewPager.getCurrentItem()%zhData.top_stories.size();
+    private void updateIntroAndDot() {
+        int currentPage = mHeadViewPager.getCurrentItem() % zhData.top_stories.size();
         for (int i = 0; i < dot_layout.getChildCount(); i++) {
-            dot_layout.getChildAt(i).setEnabled(i==currentPage);
+            dot_layout.getChildAt(i).setEnabled(i == currentPage);
         }
     }
 
@@ -139,6 +149,7 @@ public class Pager1 extends BasePager {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 String result = responseInfo.result;
                 praseData(result);
+                CacheUtils.setCache(Image_sp.zhihuItem, result, mContent);
                 if (isRefrush) {
                     showSnackbar("刷新成功啦...");
                     swipeLayout.setRefreshing(false);
@@ -170,17 +181,35 @@ public class Pager1 extends BasePager {
         stories = zhData.stories;
 
         mAdapter = new MyAdapter(mContent, stories);
-        mList.setAdapter(mAdapter);
         setHeader(mList);
+        mList.setAdapter(mAdapter);
         viewById.setText(zhData.top_stories.get(0).title);
         initDots();
         updateIntroAndDot();
+
+        if (handler == null) {
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    int currentItem = mHeadViewPager.getCurrentItem();
+                    int size = zhData.top_stories.size();
+                    if (currentItem < size - 1) {
+                        currentItem++;
+                    } else {
+                        currentItem = 0;
+                    }
+                    mHeadViewPager.setCurrentItem(currentItem);
+                    handler.sendEmptyMessageDelayed(0, 3000);
+                }
+            };
+            handler.sendEmptyMessageDelayed(0, 3000);
+        }
 
         mAdapter.setmOnItemClickListener(new MyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(mContent, ContentActivity.class);
-                intent.putExtra("id", zhData.stories.get(position -1).id + "");
+                intent.putExtra("id", zhData.stories.get(position - 1).id + "");
                 mContent.startActivity(intent);
                 String ids = PrefUtils.getString(mContent, "read_ids", "");
 

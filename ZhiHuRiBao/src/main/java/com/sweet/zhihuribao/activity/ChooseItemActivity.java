@@ -23,6 +23,7 @@ import com.sweet.zhihuribao.R;
 import com.sweet.zhihuribao.adapter.MyAdapter;
 import com.sweet.zhihuribao.base.BaseActivity;
 import com.sweet.zhihuribao.bean.ZhiM;
+import com.sweet.zhihuribao.utils.CacheUtils;
 import com.sweet.zhihuribao.utils.Image_sp;
 import com.sweet.zhihuribao.utils.PrefUtils;
 
@@ -89,11 +90,24 @@ public class ChooseItemActivity extends BaseActivity {
         System.out.println("Choose_Date" + chooseDate + "Current_date" + currentDate);
         if (!TextUtils.isEmpty(chooseDate)) {
             if (!(chooseDate.equals(currentDate))) {
-                getDataFromSever(chooseDate);
+                getCache(chooseDate);
+//                getDataFromSever(chooseDate);
             } else {
+                String cache = CacheUtils.getCache(Image_sp.zhihuItem, getApplicationContext());
+                if (!TextUtils.isEmpty(cache)){
+                    praseData(cache);
+                }
                 getDataFromSever();
             }
         }
+    }
+
+    public void getCache(String date) {
+        String cache = CacheUtils.getCache(Image_sp.oldUrl + date, getApplicationContext());
+        if (!TextUtils.isEmpty(cache)) {
+            praseData(cache);
+        }
+        getDataFromSever(date);
     }
 
     /**
@@ -109,13 +123,14 @@ public class ChooseItemActivity extends BaseActivity {
     /**
      * 从网络获取数据
      */
-    public void getDataFromSever(String date) {
+    public void getDataFromSever(final String date) {
         HttpUtils httpUtils = new HttpUtils();
         httpUtils.send(HttpRequest.HttpMethod.GET, Image_sp.oldUrl + date, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 String result = responseInfo.result;
                 praseData(result);
+                CacheUtils.setCache(Image_sp.oldUrl + date, result, getApplicationContext());
                 if (isRefrush) {
                     showSnackbar("刷新成功啦...");
                     swipeLayout.setRefreshing(false);
@@ -182,6 +197,7 @@ public class ChooseItemActivity extends BaseActivity {
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 String result = responseInfo.result;
                 praseData(result);
+                CacheUtils.setCache(Image_sp.zhihuItem, result, getApplicationContext());
                 if (isRefrush) {
                     showSnackbar("刷新成功啦...");
                     swipeLayout.setRefreshing(false);
